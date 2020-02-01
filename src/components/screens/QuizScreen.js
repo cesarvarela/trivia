@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from "react-redux"
+import { useHistory } from 'react-router-dom'
 import { load, answerQuestion } from '../../redux/reducers/quiz'
 import Card from '../ui/Card'
 import styles from './QuizScreen.module.css'
 
 function QuizScreen() {
 
+    const history = useHistory()
     const dispatch = useDispatch()
     const questions = useSelector(({ quiz }) => quiz.questions)
+    const answers = useSelector(({ quiz }) => quiz.answers)
+    const [isFetching, setIsFetching] = useState(true)
 
     function onCardRelease({ answer }) {
 
@@ -22,21 +26,36 @@ function QuizScreen() {
 
         dispatch(load())
 
-    }, [])
+    }, [dispatch])
 
-    const question = questions[questions.length - 1]
+    useEffect(() => {
+
+        if (isFetching && questions.length === 10) {
+
+            setIsFetching(false)
+        }
+
+        if (!isFetching && answers.length === questions.length) {
+
+            console.log('push results')
+            history.push('/results')
+        }
+
+    }, [questions, answers, history, isFetching])
+
+    const question = questions[questions.length - answers.length - 1]
 
     return <div>
-        {questions.length === 0 &&
+        {isFetching &&
             <div>...loading</div>
         }
 
-        {questions.length > 0 &&
+        {question &&
             <div>
                 <h1 className={styles.title}>{question.category}</h1>
                 <div className={styles.cardsSpace}>
                     <div className={styles.cards}>
-                        {questions.map((q, i) => <Card key={q.question} text={q.question} onRelease={onCardRelease} />)}
+                        {questions.filter((q, i) => i < questions.length - answers.length).map((q, i) => <Card key={q.question} text={q.question} onRelease={onCardRelease} />)}
                     </div>
                 </div>
             </div>
