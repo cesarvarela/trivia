@@ -78,8 +78,6 @@ export default function Card({ index, text, onRelease }) {
         }
     }, [])
 
-    console.log(position.x)
-
     const style = {
         transform: `translate3d(${position.x}px,${position.y}px,0px) rotate(${(position.x * 10) / 150}deg)`,
         zIndex: index,

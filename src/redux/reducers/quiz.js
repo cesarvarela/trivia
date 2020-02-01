@@ -7,7 +7,6 @@ function questions(state = [], action = {}) {
     switch (action.type) {
 
         case FETCH_COMPLETE: return [...action.questions]
-        case ANSWER: return state.filter((_, i) => i < state.length - 1)
 
         default: return state
     }
