@@ -32,12 +32,14 @@ function QuizScreen() {
         }
 
         {questions.length > 0 &&
-            <>
-                <h1>{question.category}</h1>
-                <div className={styles.cards}>
-                    {questions.map((q, i) => <Card key={q.question} text={q.question} onRelease={onCardRelease} />)}
+            <div>
+                <h1 className={styles.title}>{question.category}</h1>
+                <div className={styles.cardsSpace}>
+                    <div className={styles.cards}>
+                        {questions.map((q, i) => <Card key={q.question} text={q.question} onRelease={onCardRelease} />)}
+                    </div>
                 </div>
-            </>
+            </div>
         }
     </div >
 }
